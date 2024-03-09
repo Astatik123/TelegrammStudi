@@ -9,7 +9,12 @@ bot = telebot.TeleBot("7049864536:AAEG1UI5Y9gleLIS0zYBhGTA3EEsMvfrsl0")
 
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
-    bot.reply_to(message, "Привіт, я бот погоди! Введіть /weather <місто>, щоб дізнатися погоду. Наприклад: /weather Львів чи /weather Kyiv")
+    if message.text == '/start':
+        bot.reply_to(message, "Привіт, я бот погоди! Введіть /help щоб дізнатись як працює бот. ")
+    elif message.text == '/help':
+        bot.reply_to(message, "Цей бот допоможе вам отримати погоду для вказаного міста. Введіть /weather <місто>, щоб дізнатися погоду. Наприклад: /weather Львів чи /weather Kyiv")
+    else:
+        bot.reply_to(message, "Не розумію вашого запиту. Використовуйте команду /help для довідки.")
 
 @bot.message_handler(commands=['weather'])
 def weather(message):
@@ -34,5 +39,8 @@ def get_weather(city):
     except Exception as e:
         print("Error fetching weather:", e)
         return None
+@bot.message_handler(func=lambda message: True)
+def echo_all(message):
+    bot.reply_to(message, "Не розумію вашого повідомлення. Використовуйте команду /help для довідки.")
 
 bot.polling(none_stop=True)
